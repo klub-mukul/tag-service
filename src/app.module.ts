@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TagsModule } from './tags/tags.module';
+import { Tag } from './tags/entities/tag.entity';
 
 @Module({
     imports: [
@@ -12,9 +14,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: 'admin',
         password: '',
         database: 'tags',
-        entities: [],
+        entities: [Tag],
         synchronize: true,
       }),
+      TagsModule,
     ],
   controllers: [AppController],
   providers: [AppService],
