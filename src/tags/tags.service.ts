@@ -8,27 +8,43 @@ import { Tag } from './tag.entity';
 @Injectable()
 export class TagsService {
   constructor(
-    @InjectRepository(Tag) 
-    private readonly tagRepository: TagRepository){
-    }
-
-  create(createTagDto: CreateTagDto){
-    return this.tagRepository.insert(createTagDto);
+    @InjectRepository(Tag)
+    private readonly tagRepository: TagRepository) {
   }
 
-  findAll() {
-    return `This action returns all tags`;
+  async create(createTagDto: CreateTagDto, createdBy: string) {
+    console.log(createdBy);
+    
+    const slug: string = Tag.createSlug({...createTagDto});
+    
+    const isStatic: boolean = createTagDto.conditions == null;
+
+    return await this.tagRepository.insert({
+      ...createTagDto,
+      createdBy: createdBy,
+      updatedBy: createdBy,
+      slug: slug,
+      isStatic: isStatic
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tag`;
-  }
+  // findAll(){}
 
-  update(id: number, updateTagDto: UpdateTagDto) {
-    return `This action updates a #${id} tag`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} tag`;
-  }
+  // findOne(id: number) {
+  //   return this.tagRepository.findOne({
+  //     where{
+  //       id: id,
+        
+  //     }, select
+  //   });
+  // }
+
+  // update(id: number, updateTagDto: UpdateTagDto) {
+  //   return `This action updates a #${id} tag`;
+  // }
+
+  // remove(id: number) {
+  //   return `This action removes a #${id} tag`;
+  // }
 }

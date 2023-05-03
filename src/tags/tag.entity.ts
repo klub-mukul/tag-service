@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { tagConditions } from "./tagConditions.dto";
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity("tags")
 export class Tag {
@@ -72,4 +73,14 @@ export class Tag {
      */
     @DeleteDateColumn()
     deletedAt?: Date;
+
+    public static createSlug(dto: any): string {
+        const name: string = dto.name != null ? dto.name + '-' : '';
+        const type: string = dto.type != null ? dto.type + '-' : '';
+        const resourceId: string = dto.resourceId != null ? dto.resourceId + '-' : '';
+        const resourceType: string = dto.resourceType != null ? dto.resourceType + '-' : '';
+        const resource: string = dto.resource != null ? dto.resource + '-' : '';
+        return name + type + resource + resourceType + resourceId + uuidv4();;
+    }
 }
+
