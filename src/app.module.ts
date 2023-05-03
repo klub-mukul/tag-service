@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TagsModule } from './tags/tags.module';
-import { Tag } from './tags/entities/tag.entity';
+import { Tag } from './tags/tag.entity';
 
 @Module({
     imports: [
