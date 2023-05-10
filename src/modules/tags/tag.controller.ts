@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -18,54 +19,65 @@ import * as fs from 'fs';
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiQuery,
+  ApiTags,
 } from '@nestjs/swagger';
 import { parse } from 'csv-parse';
 import { diskStorage } from 'multer';
 import { UpdatedByDto } from '../../common/dto/updatedBy.dto';
-import { CreatedByDto } from './../../common/dto/createdBy.dto';
-import { logger } from './../../config/logger';
-import { csvFileFilter } from './../../utils/csvHelpers';
+import { logger } from '../../config/logger';
+import { csvFileFilter } from '../../utils/csvHelpers';
 import { CreateTagDto } from './dto/createTag.dto';
 import { GetTagDto } from './dto/getTag.dto';
 import { ResponseTagDto } from './dto/responseTag.dto';
 import { UpdateTagDto } from './dto/updateTag.dto';
 import resourceValidation from './dto/validations/resourceValidation.validation';
-import { TagsService } from './tags.service';
+import { TagService } from './tag.service';
+import { NoTagFoundException } from './../../exceptions/noTagFoundException.exception';
 
 /**
- * TagsController
+ * TagController
  * @export
- * @class TagsController
+ * @class TagController
  */
+@ApiTags('Tags')
 @Controller('tags')
-export class TagsController {
+export class TagController {
   /**
    * constructor
-   * Creates an instance of TagsController.
-   * @param {TagsService} tagsService
-   * @memberof TagsController
+   * Creates an instance of TagController.
+   * @param {TagService} tagService
+   * @memberof TagController
    */
-  constructor(private readonly tagsService: TagsService) {}
+  constructor(private readonly tagService: TagService) {}
 
   /**
    * create
    * @param {CreateTagDto} createTagDto
    * @return {Promise<ResponseTagDto>}
-   * @memberof TagsController
+   * @memberof TagController
    */
   @Post()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Post: Create a new tag.',
   })
-  @ApiOkResponse({
+  @ApiCreatedResponse({
     status: 200,
-    description: 'Successful',
+    description: 'Tag has been successfully created. ',
     type: CreateTagDto,
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'Tag has not been created. Bad request.',
+    type: BadRequestException,
   })
   public async create(
     @Body(new ValidationPipe()) createTagDto: CreateTagDto,
@@ -76,14 +88,14 @@ export class TagsController {
       createTagDto.resourceType,
       createTagDto.resource,
     );
-    return this.tagsService.create(createTagDto);
+    return this.tagService.create(createTagDto);
   }
 
   /**
    *getById
    * @param {string} id
    * @return {Promise<ResponseTagDto>}
-   * @memberof TagsController
+   * @memberof TagController
    */
   @Get(':id')
   @HttpCode(HttpStatus.OK)
@@ -93,21 +105,31 @@ export class TagsController {
   })
   @ApiOkResponse({
     status: 200,
-    description: 'Successful',
+    description: 'Found tag successfully.',
     type: ResponseTagDto,
+  })
+  @ApiNotFoundResponse({
+    status: 204,
+    description: 'No tag founded.',
+    type: NoTagFoundException,
+  })
+  @ApiBadRequestResponse({
+    status: 404,
+    description: 'Bad request.',
+    type: BadRequestException,
   })
   getById(
     @Param('id', ParseUUIDPipe)
     id: string,
   ): Promise<ResponseTagDto> {
-    return this.tagsService.find(id);
+    return this.tagService.getById(id);
   }
 
   /**
    * getAll
    * @param  {GetTagDto} getDto
    * @return {Promise<ResponseTagDto>}
-   * @memberof TagsController
+   * @memberof TagController
    */
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -120,6 +142,16 @@ export class TagsController {
     description: 'Successful',
     type: GetTagDto,
   })
+  @ApiNotFoundResponse({
+    status: 204,
+    description: 'No tag founded.',
+    type: NoTagFoundException,
+  })
+  @ApiBadRequestResponse({
+    status: 404,
+    description: 'Bad request.',
+    type: BadRequestException,
+  })
   public async getAll(
     @Query(new ValidationPipe()) getTagDto: GetTagDto,
   ): Promise<ResponseTagDto[]> {
@@ -128,7 +160,7 @@ export class TagsController {
       getTagDto.resourceType,
       getTagDto.resource,
     );
-    return this.tagsService.findAll(getTagDto);
+    return this.tagService.getAllTags(getTagDto);
   }
 
   /**
@@ -136,7 +168,7 @@ export class TagsController {
    * @param {string} id
    * @param {UpdateTagDto} updateTagDto
    * @return {Promise<ResponseTagDto>}
-   * @memberof TagsController
+   * @memberof TagController
    */
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -146,6 +178,16 @@ export class TagsController {
     status: 200,
     description: 'Successful',
     type: ResponseTagDto,
+  })
+  @ApiNoContentResponse({
+    status: 204,
+    description: 'No tag founded.',
+    type: NoTagFoundException,
+  })
+  @ApiBadRequestResponse({
+    status: 404,
+    description: 'Bad request.',
+    type: BadRequestException,
   })
   @Patch(':id')
   update(
@@ -158,31 +200,41 @@ export class TagsController {
       updateTagDto.resourceType,
       updateTagDto.resource,
     );
-    return this.tagsService.update(id, updateTagDto);
+    return this.tagService.update(id, updateTagDto);
   }
 
   /**
    * delete
    * @param {string} id
    * @return {HttpStatus.NO_CONTENT}
-   * @memberof TagsController
+   * @memberof TagController
    */
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
+  @ApiParam({ name: 'id', type: String, required: true })
   @ApiOperation({
     summary: 'Portal: Archive a single user by its ID.',
   })
-  @ApiParam({ name: 'id', type: String, required: true })
   @ApiOkResponse({
     status: 204,
     description: 'Successful',
     type: String,
   })
+  @ApiNoContentResponse({
+    status: 204,
+    description: 'No tag founded.',
+    type: NoTagFoundException,
+  })
+  @ApiBadRequestResponse({
+    status: 404,
+    description: 'Bad request.',
+    type: BadRequestException,
+  })
   delete(
     @Param('id', ParseUUIDPipe) id: string,
     @Body(new ValidationPipe()) updatedByDto: UpdatedByDto,
   ) {
-    return this.tagsService.delete(id, updatedByDto.updatedBy);
+    return this.tagService.delete(id, updatedByDto.updatedBy);
   }
 
   /**
@@ -190,17 +242,22 @@ export class TagsController {
    * @param {Express.Multer.File} file
    * @param {string} createdBy
    * @return {Object}
-   * @memberof TagsController
+   * @memberof TagController
    */
   @Post('bulk-upload')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Post: Create tags from a csv file',
   })
-  @ApiOkResponse({
-    status: 200,
+  @ApiCreatedResponse({
+    status: 201,
     description: 'Successful',
     type: Object,
+  })
+  @ApiBadRequestResponse({
+    status: 404,
+    description: 'Bad request.',
+    type: BadRequestException,
   })
   @UseInterceptors(
     FileInterceptor('file', {
@@ -224,7 +281,7 @@ export class TagsController {
       if (error) {
         logger.error(error);
       }
-      this.tagsService.uploadTags(result, createdBy);
+      this.tagService.uploadTags(result, createdBy);
     });
     return response;
   }

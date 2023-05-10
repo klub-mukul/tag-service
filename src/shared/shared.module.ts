@@ -1,7 +1,7 @@
-import { Global, Module } from '@nestjs/common';
-import { ConfigService } from './services/config.service';
-import { JwtModule } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
+import { Global, Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from './services/config.service';
 
 /**
  * providers

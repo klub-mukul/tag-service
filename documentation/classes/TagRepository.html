@@ -66,6 +66,13 @@
         </p>
 
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>TagRepository</p>
+
+            </p>
 
             <p class="comment">
                 <h3>Extends</h3>
@@ -88,12 +95,15 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="5" class="link-to-prism">src/modules/tags/tag.respository.ts:5</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/modules/tags/tag.respository.ts:11</a></div>
                             </td>
                         </tr>
 
                 <tr>
                     <td class="col-md-4">
+                            <div class="io-description"><p>constructor
+Creates an instance of UserService.</p>
+</div>
                             <div>
                                     <b>Parameters :</b>
                                     <table class="params">
@@ -141,7 +151,19 @@
 import { Repository } from &#x27;typeorm&#x27;;
 import { Tag } from &#x27;./tag.entity&#x27;;
 
+/**
+ * TagRepository
+ * @export
+ * @class TagRepository
+ * @extends {Repository&lt;Tag&gt;}
+ */
 export class TagRepository extends Repository&lt;Tag&gt; {
+  /**
+   * constructor
+   * Creates an instance of UserService.
+   * @class TagRepository
+   * @param {Repository&lt;Tag&gt;} tagRepository
+   */
   constructor(
     @InjectRepository(Tag) private readonly tagRepository: Repository&lt;Tag&gt;,
   ) {

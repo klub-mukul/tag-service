@@ -93,12 +93,15 @@
                                 <a href="#name" >name</a>
                             </li>
                             <li>
+                                    <span class="modifier">Optional</span>
                                 <a href="#resource" >resource</a>
                             </li>
                             <li>
+                                    <span class="modifier">Optional</span>
                                 <a href="#resourceId" >resourceId</a>
                             </li>
                             <li>
+                                    <span class="modifier">Optional</span>
                                 <a href="#resourceType" >resourceType</a>
                             </li>
                             <li>
@@ -146,16 +149,22 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsOptional()<br />
+                            @IsOptional()<br />@ApiPropertyOptional({description: &#x27;tag conditions&#x27;, type: Array, isArray: true, required: false, example: undefined})<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:29</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="98" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:98</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>conditions</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -181,16 +190,22 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsDefined()<br />@IsUUID()<br />
+                            @IsDefined()<br />@IsUUID()<br />@ApiProperty({description: &#x27;identifier of tag creator&#x27;, type: UUID, required: true, example: &#x27;6ebb0c45-f709-44a6-9fd9-476d1c9484e9&#x27;})<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:38</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="129" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:129</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>createdBy</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -216,16 +231,22 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />@IsNotEmpty()<br />@IsDefined()<br />
+                            @IsString()<br />@IsNotEmpty()<br />@IsDefined()<br />@ApiProperty({description: &#x27;name of tag&#x27;, type: String, required: true, example: &#x27;revenue&#x27;})<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:14</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:27</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>name</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -235,6 +256,7 @@
                 <td class="col-md-4">
                     <a name="resource"></a>
                     <span class="name">
+                            <span class="modifier">Optional</span>
                         <span ><b>resource</b></span>
                         <a href="#resource"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -251,16 +273,22 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />@IsOptional()<br />
+                            @IsString()<br />@IsOptional()<br />@ApiPropertyOptional({description: &#x27;name of resource&#x27;, type: String, required: false, example: &#x27;bank&#x27;})<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:18</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:42</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>resource</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -270,6 +298,7 @@
                 <td class="col-md-4">
                     <a name="resourceId"></a>
                     <span class="name">
+                            <span class="modifier">Optional</span>
                         <span ><b>resourceId</b></span>
                         <a href="#resourceId"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -286,16 +315,22 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />@IsOptional()<br />
+                            @IsString()<br />@IsOptional()<br />@ApiPropertyOptional({description: &#x27;name of resourceId&#x27;, type: String, required: false, example: &#x27;T001&#x27;})<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:22</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:57</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>resourceId</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -305,6 +340,7 @@
                 <td class="col-md-4">
                     <a name="resourceType"></a>
                     <span class="name">
+                            <span class="modifier">Optional</span>
                         <span ><b>resourceType</b></span>
                         <a href="#resourceType"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -321,16 +357,22 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />@IsOptional()<br />
+                            @IsString()<br />@IsOptional()<br />@ApiPropertyOptional({description: &#x27;name of resourceType&#x27;, type: String, required: false, example: &#x27;GST&#x27;})<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:26</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="72" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:72</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>resourceType</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -356,16 +398,22 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsString()<br />@IsDefined()<br />@IsNotEmpty()<br />
+                            @IsString()<br />@IsDefined()<br />@IsNotEmpty()<br />@ApiProperty({description: &#x27;type of tag&#x27;, type: String, required: true, example: &#x27;category&#x27;})<br />
                         </code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:34</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="114" class="link-to-prism">src/modules/tags/dto/createTag.dto.ts:114</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>type</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -381,43 +429,134 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ApiProperty, ApiPropertyOptional } from &#x27;@nestjs/swagger&#x27;;
+import {
   IsDefined,
   IsNotEmpty,
   IsOptional,
   IsString,
   IsUUID,
 } from &#x27;class-validator&#x27;;
+import { UUID } from &#x27;typeorm/driver/mongodb/bson.typings&#x27;;
 import { TagConditions } from &#x27;./tagConditions.dto&#x27;;
 
 export class CreateTagDto {
+  /**
+   * name
+   * @type {string}
+   * @memberof CreateTagDto
+   */
   @IsString()
   @IsNotEmpty()
   @IsDefined()
+  @ApiProperty({
+    description: &#x27;name of tag&#x27;,
+    type: String,
+    required: true,
+    example: &#x27;revenue&#x27;,
+  })
   name: string;
 
+  /**
+   * resource
+   * @type {string}
+   * @memberof CreateTagDto
+   */
   @IsString()
   @IsOptional()
-  resource: string;
+  @ApiPropertyOptional({
+    description: &#x27;name of resource&#x27;,
+    type: String,
+    required: false,
+    example: &#x27;bank&#x27;,
+  })
+  resource?: string;
 
+  /**
+   * resourceId
+   * @type {string}
+   * @memberof CreateTagDto
+   */
   @IsString()
   @IsOptional()
-  resourceId: string;
+  @ApiPropertyOptional({
+    description: &#x27;name of resourceId&#x27;,
+    type: String,
+    required: false,
+    example: &#x27;T001&#x27;,
+  })
+  resourceId?: string;
 
+  /**
+   * resourceType
+   * @type {string}
+   * @memberof CreateTagDto
+   */
   @IsString()
   @IsOptional()
-  resourceType: string;
+  @ApiPropertyOptional({
+    description: &#x27;name of resourceType&#x27;,
+    type: String,
+    required: false,
+    example: &#x27;GST&#x27;,
+  })
+  resourceType?: string;
 
+  /**
+   * conditions
+   * @type {TagConditions[]}
+   * @memberof CreateTagDto
+   */
   @IsOptional()
+  @ApiPropertyOptional({
+    description: &#x27;tag conditions&#x27;,
+    type: Array,
+    isArray: true,
+    required: false,
+    example: [
+      {
+        field: &#x27;description&#x27;,
+        keywords: [
+          &#x27;Amazon Vendor Central&#x27;,
+          &#x27;Amazon Wholesale&#x27;,
+          &#x27;Apple&#x27;,
+          &#x27;Cash Deposit&#x27;,
+        ],
+        condition: &#x27;contains&#x27;,
+      },
+    ],
+  })
   conditions?: TagConditions[];
 
+  /**
+   * type
+   * @type {string}
+   * @memberof CreateTagDto
+   */
   @IsString()
   @IsDefined()
   @IsNotEmpty()
+  @ApiProperty({
+    description: &#x27;type of tag&#x27;,
+    type: String,
+    required: true,
+    example: &#x27;category&#x27;,
+  })
   type: string;
 
+  /**
+   * createdBy
+   * @type {UUID}
+   * @memberof CreateTagDto
+   */
   @IsDefined()
   @IsUUID()
+  @ApiProperty({
+    description: &#x27;identifier of tag creator&#x27;,
+    type: UUID,
+    required: true,
+    example: &#x27;6ebb0c45-f709-44a6-9fd9-476d1c9484e9&#x27;,
+  })
   createdBy: string;
 }
 </code></pre>

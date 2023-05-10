@@ -127,12 +127,27 @@
 
                     </td>
                 </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ApiProperty({description: &#x27;condition of one of conditions of a tag&#x27;, type: String, required: true, example: &#x27;contains&#x27;})<br />
+                        </code>
+                    </td>
+                </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="3" class="link-to-prism">src/modules/tags/dto/tagConditions.dto.ts:3</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/modules/tags/dto/tagConditions.dto.ts:28</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>condition</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -153,12 +168,27 @@
 
                     </td>
                 </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ApiProperty({description: &#x27;field of one of conditions of a tag&#x27;, type: String, required: true, example: &#x27;description&#x27;})<br />
+                        </code>
+                    </td>
+                </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="2" class="link-to-prism">src/modules/tags/dto/tagConditions.dto.ts:2</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/modules/tags/dto/tagConditions.dto.ts:15</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>field</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -179,12 +209,27 @@
 
                     </td>
                 </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ApiProperty({description: &#x27;keywords of one of conditions of a tag&#x27;, type: Array, isArray: true, required: true, example: undefined})<br />
+                        </code>
+                    </td>
+                </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="4" class="link-to-prism">src/modules/tags/dto/tagConditions.dto.ts:4</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/modules/tags/dto/tagConditions.dto.ts:47</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>keywords</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -200,9 +245,52 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">export class TagConditions {
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ApiProperty } from &#x27;@nestjs/swagger&#x27;;
+
+export class TagConditions {
+  /**
+   * field
+   * @type {string}
+   * @memberof TagConditions
+   */
+  @ApiProperty({
+    description: &#x27;field of one of conditions of a tag&#x27;,
+    type: String,
+    required: true,
+    example: &#x27;description&#x27;,
+  })
   field: string;
+
+  /**
+   * condition
+   * @type {string}
+   * @memberof TagConditions
+   */
+  @ApiProperty({
+    description: &#x27;condition of one of conditions of a tag&#x27;,
+    type: String,
+    required: true,
+    example: &#x27;contains&#x27;,
+  })
   condition: string;
+
+  /**
+   * keywords
+   * @type {string[]}
+   * @memberof TagConditions
+   */
+  @ApiProperty({
+    description: &#x27;keywords of one of conditions of a tag&#x27;,
+    type: Array,
+    isArray: true,
+    required: true,
+    example: [
+      &#x27;Amazon Vendor Central&#x27;,
+      &#x27;Amazon Wholesale&#x27;,
+      &#x27;Apple&#x27;,
+      &#x27;Cash Deposit&#x27;,
+    ],
+  })
   keywords: string[];
 }
 </code></pre>

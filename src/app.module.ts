@@ -4,7 +4,7 @@ import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppService } from './app.service';
 import { HealthController } from './modules/health/health.controller';
-import { TagsModule } from './modules/tags/tags.module';
+import { TagModule } from './modules/tags/tag.module';
 import { ConfigService } from './shared/services/config.service';
 import { SharedModule } from './shared/shared.module';
 
@@ -21,7 +21,7 @@ import { SharedModule } from './shared/shared.module';
       inject: [ConfigService],
     }),
     TerminusModule,
-    TagsModule,
+    TagModule,
     MulterModule.register({
       dest: './uploads',
     }),
@@ -29,4 +29,8 @@ import { SharedModule } from './shared/shared.module';
   controllers: [HealthController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(){
+    console.log('__dirname' + __dirname);
+  }
+}

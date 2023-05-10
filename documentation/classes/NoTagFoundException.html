@@ -141,7 +141,7 @@
 
 export class NoTagFoundException extends HttpException {
   constructor(message: string) {
-    super(&#x27;No Tag Found with id: &#x27; + message, HttpStatus.NOT_FOUND);
+    super(&#x27;No Tag Found with id: &#x27; + message, HttpStatus.NO_CONTENT);
   }
 }
 </code></pre>

@@ -1,30 +1,33 @@
-import {
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-  Query,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { response } from 'express';
+import { NoTagFoundException } from '../../exceptions/noTagFoundException.exception';
+import { TagConditionsValidationException } from '../../exceptions/tagConditionsValidationException.exception';
+import { UnmatchingTagDetailsValidationException } from '../../exceptions/unmatchingTagDetailsValidationException.exception';
 import { CreateTagDto } from './dto/createTag.dto';
 import { GetTagDto } from './dto/getTag.dto';
 import { Tag } from './tag.entity';
-import { TagConditionsValidationException } from '../../exceptions/tagConditionsValidationException.exception';
-import { NoTagFoundException } from '../../exceptions/noTagFoundException.exception';
-import { UnmatchingTagDetailsValidationException } from '../../exceptions/unmatchingTagDetailsValidationException.exception';
 
-import { TagRepository } from './tag.respository';
-import { TagConditions } from './dto/tagConditions.dto';
-import { UpdateTagDto } from './dto/updateTag.dto';
+import createCoreFieldsString from '../../utils/createCoreFieldsString';
 import createSlug from '../../utils/createSlug';
 import { ResponseTagDto } from './dto/responseTag.dto';
-import { CreatedByDto } from 'src/common/dto/createdBy.dto';
-import resourceValidation from './dto/validations/resourceValidation.validation';
-import { log } from 'console';
-import createCoreFieldsString from './../../utils/createCoreFieldsString';
+import { TagConditions } from './dto/tagConditions.dto';
+import { UpdateTagDto } from './dto/updateTag.dto';
+import { TagRepository } from './tag.respository';
 
+/**
+ * TagService
+ * @export
+ * @class TagService
+ */
 @Injectable()
-export class TagsService {
+export class TagService {
+  /**
+   * constructor
+   * Creates an instance of UserService.
+   * @param {UserRepository} userRepository
+   * @memberof UserService
+   */
   constructor(
     @InjectRepository(Tag)
     private readonly tagRepository: TagRepository,
@@ -55,7 +58,14 @@ export class TagsService {
     });
   }
 
-  async create(createTagDto: CreateTagDto): Promise<ResponseTagDto> {
+  /**
+   * create
+   * @description Function for creating a new tag.
+   * @param {CreateTagDto} createTagDto
+   * @return {Promise<ResponseTagDto>}
+   * @memberof TagService
+   */
+  public async create(createTagDto: CreateTagDto): Promise<ResponseTagDto> {
     const slug: string = createSlug({ ...createTagDto });
     const createdBy = createTagDto.createdBy;
     const createIsStatic: boolean =
@@ -95,18 +105,32 @@ export class TagsService {
     return new ResponseTagDto(await this.tagRepository.save(res));
   }
 
-  async find(id: string): Promise<ResponseTagDto> {
+  /**
+   * getById
+   * @description Find an tag using its ID
+   * @param {string} id
+   * @return {Promise<ResponseTagDto>}
+   * @memberof TagService
+   */
+  public async getById(id: string): Promise<ResponseTagDto> {
     const res: Tag = await this.tagRepository.findOne({
       where: { id: id },
     });
     console.log(res);
     if (res == null) {
-      throw new NotFoundException('No Tag found');
+      throw new NoTagFoundException(id);
     }
     return new ResponseTagDto(res);
   }
 
-  async findAll(getDto: GetTagDto): Promise<ResponseTagDto[]> {
+  /**
+   * getAllTags
+   * @description Get all tags from database with query filters
+   * @param {GetTagDto} getDto
+   * @return {Promise<ResponseTagDto>}
+   * @memberof TagService
+   */
+  async getAllTags(getDto: GetTagDto): Promise<ResponseTagDto[]> {
     console.log(getDto.resource);
     const res: Tag[] = await this.tagRepository.find({
       where: {
@@ -129,6 +153,14 @@ export class TagsService {
     return response;
   }
 
+  /**
+   * delete
+   * @description This function archive a tag with the passed tag id
+   * @param {string} id
+   * @param {string} updatedBy
+   * @return {Object}  {Object}
+   * @memberof TagService
+   */
   async delete(id: string, updatedBy: string) {
     const todo: Tag = await this.tagRepository.findOne({ where: { id: id } });
     if (todo) {
@@ -141,6 +173,14 @@ export class TagsService {
     return response.status(HttpStatus.NO_CONTENT);
   }
 
+  /**
+   * update
+   * @description Update an user entity with new data.
+   * @param {string} id
+   * @param {UpdateTagDto} updateTagDto
+   * @return {Promise<ResponseTagDto>}
+   * @memberof TagService
+   */
   async update(
     id: string,
     updateTagDto: UpdateTagDto,
@@ -196,6 +236,14 @@ export class TagsService {
     }
   }
 
+  /**
+   * uploadTags
+   * @description Function for creating a new tag.
+   * @param {any[][]} grid
+   * @param {string} createdBy
+   * @return {void}
+   * @memberof TagService
+   */
   uploadTags(grid: any[][], createdBy: string): void {
     const numberOfCols = grid[0].length;
     const numberOfRows = grid.length;
@@ -230,7 +278,6 @@ export class TagsService {
           resourceType: null,
         };
         this.create(createTagDto);
-        console.log('success');
       }
     }
   }
