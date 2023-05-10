@@ -1,28 +1,32 @@
 import { Module } from '@nestjs/common';
+import { MulterModule } from '@nestjs/platform-express';
+import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { HealthController } from './modules/health/health.controller';
 import { TagsModule } from './modules/tags/tags.module';
 import { ConfigService } from './shared/services/config.service';
 import { SharedModule } from './shared/shared.module';
-import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      imports: [SharedModule],
+      imports: [
+        SharedModule,
+        MulterModule.register({
+          dest: 'src/uploads',
+        }),
+      ],
       useFactory: (configService: ConfigService) => configService.typeOrmConfig,
       inject: [ConfigService],
     }),
-
+    TerminusModule,
     TagsModule,
     MulterModule.register({
       dest: './uploads',
     }),
   ],
-  controllers: [AppController],
+  controllers: [HealthController],
   providers: [AppService],
 })
-export class AppModule {
-  constructor() {}
-}
+export class AppModule {}

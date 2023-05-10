@@ -18,6 +18,10 @@ export class Tag {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  /**
+   * name
+   * @type {string}
+   */
   @Column({ type: 'text', nullable: false })
   name: string;
 

@@ -1,7 +1,7 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus } from '@nestjs/common';
 
-export class ResourceValidationException extends HttpException{
-    constructor(message: string){
-        super(message, HttpStatus.BAD_REQUEST);
-    }
+export class ResourceValidationException extends HttpException {
+  constructor(message: string) {
+    super(message, HttpStatus.BAD_REQUEST);
+  }
 }

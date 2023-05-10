@@ -14,12 +14,15 @@ export class CreateTagDto {
   name: string;
 
   @IsString()
+  @IsOptional()
   resource: string;
 
   @IsString()
+  @IsOptional()
   resourceId: string;
 
   @IsString()
+  @IsOptional()
   resourceType: string;
 
   @IsOptional()
@@ -27,6 +30,7 @@ export class CreateTagDto {
 
   @IsString()
   @IsDefined()
+  @IsNotEmpty()
   type: string;
 
   @IsDefined()

@@ -1,4 +1,9 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  Query,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { response } from 'express';
 import { CreateTagDto } from './dto/createTag.dto';
@@ -6,11 +11,17 @@ import { GetTagDto } from './dto/getTag.dto';
 import { Tag } from './tag.entity';
 import { TagConditionsValidationException } from '../../exceptions/tagConditionsValidationException.exception';
 import { NoTagFoundException } from '../../exceptions/noTagFoundException.exception';
-import { ResourceValidationException } from '../../exceptions/resourceValidationException.exception';
+import { UnmatchingTagDetailsValidationException } from '../../exceptions/unmatchingTagDetailsValidationException.exception';
+
 import { TagRepository } from './tag.respository';
 import { TagConditions } from './dto/tagConditions.dto';
 import { UpdateTagDto } from './dto/updateTag.dto';
 import createSlug from '../../utils/createSlug';
+import { ResponseTagDto } from './dto/responseTag.dto';
+import { CreatedByDto } from 'src/common/dto/createdBy.dto';
+import resourceValidation from './dto/validations/resourceValidation.validation';
+import { log } from 'console';
+import createCoreFieldsString from './../../utils/createCoreFieldsString';
 
 @Injectable()
 export class TagsService {
@@ -19,11 +30,23 @@ export class TagsService {
     private readonly tagRepository: TagRepository,
   ) {}
 
-  mergeConditions(condition1: TagConditions[], condition2: TagConditions[]) {
-    condition1[0].keywords = [
-      ...new Set([...condition1[0].keywords, ...condition2[0].keywords]),
+  mergeConditions(
+    firstCondition: TagConditions[],
+    secondCondition: TagConditions[],
+  ) {
+    if (firstCondition.length == 0) {
+      return secondCondition;
+    } else if (secondCondition.length == 0) {
+      return firstCondition;
+    }
+
+    firstCondition[0].keywords = [
+      ...new Set([
+        ...firstCondition[0].keywords,
+        ...secondCondition[0].keywords,
+      ]),
     ];
-    return condition1;
+    return firstCondition;
   }
 
   async findByFields(fields: any) {
@@ -32,146 +55,183 @@ export class TagsService {
     });
   }
 
-  async create(createTagDto: CreateTagDto) {
-    console.log('createdBy : ' + createTagDto.createdBy);
-
+  async create(createTagDto: CreateTagDto): Promise<ResponseTagDto> {
     const slug: string = createSlug({ ...createTagDto });
     const createdBy = createTagDto.createdBy;
-    const isStatic: boolean = createTagDto.conditions == null;
+    const createIsStatic: boolean =
+      createTagDto.conditions == null || createTagDto.conditions.length == 0;
+    const createConditions: TagConditions[] =
+      createIsStatic == true ? [] : createTagDto.conditions;
 
-    const res = await this.findByFields({
-      name: createTagDto.name,
-      resource: createTagDto.resource,
-      resourceId: createTagDto.resourceId,
-      resourceType: createTagDto.resourceType,
-      type: createTagDto.type,
+    const res = await this.tagRepository.findOne({
+      where: {
+        name: createTagDto.name,
+        resource: createTagDto.resource,
+        resourceId: createTagDto.resourceId,
+        resourceType: createTagDto.resourceType,
+        type: createTagDto.type,
+      },
     });
 
-    const conditions: TagConditions[] = createTagDto.conditions;
-    console.log(res);
-
-    if (res.length == 0) {
-      return await this.tagRepository.insert({
-        ...createTagDto,
-        createdBy: createdBy,
-        updatedBy: createdBy,
-        slug: slug,
-        isStatic: isStatic,
-        conditions: conditions,
-      });
+    if (res == null) {
+      return new ResponseTagDto(
+        await this.tagRepository.save({
+          ...createTagDto,
+          updatedBy: createdBy,
+          slug: slug,
+          isStatic: createIsStatic,
+          conditions: createConditions,
+        }),
+      );
     }
 
-    console.log(isStatic);
-    if (isStatic == false) {
-      // res[0].conditions = this.mergeConditions(res[0].conditions, createTagDto.conditions);
+    if (createIsStatic == false) {
+      res.conditions = this.mergeConditions(createConditions, res.conditions);
+    } else {
+      res.conditions = [];
     }
-    return this.tagRepository.save(res);
+    res.updatedBy = createTagDto.createdBy;
+    res.isStatic = createIsStatic;
+    return new ResponseTagDto(await this.tagRepository.save(res));
   }
 
-  async find(id: string) {
-    const res = await this.tagRepository.find({
-      where: { id: id, deletedAt: null },
+  async find(id: string): Promise<ResponseTagDto> {
+    const res: Tag = await this.tagRepository.findOne({
+      where: { id: id },
     });
     console.log(res);
-    if (res.length == 0) {
-      console.log('NULL');
+    if (res == null) {
       throw new NotFoundException('No Tag found');
     }
-    return res;
+    return new ResponseTagDto(res);
   }
 
-  async findAll(getDto: GetTagDto) {
-    console.log(getDto);
-
-    const res = await this.findByFields({
-      name: getDto.name,
-      resource: getDto.resource,
-      resourceId: getDto.resourceId,
-      resourceType: getDto.resourceType,
-      type: getDto.type,
+  async findAll(getDto: GetTagDto): Promise<ResponseTagDto[]> {
+    console.log(getDto.resource);
+    const res: Tag[] = await this.tagRepository.find({
+      where: {
+        resource: getDto.resource,
+        resourceId: getDto.resourceId,
+        resourceType: getDto.resourceType,
+        type: getDto.type,
+        name: getDto.name,
+      },
     });
 
-    // console.log(res.length);
-    // console.log(res);
     if (res.length == 0) {
-      console.log('NULL');
+      console.log('res.length==0');
       throw new NotFoundException('No Tag found');
     }
-    return res;
+    const response: ResponseTagDto[] = [];
+    res.forEach(function (r) {
+      response.push(new ResponseTagDto(r));
+    });
+    return response;
   }
 
   async delete(id: string, updatedBy: string) {
-    // console.log("initiated Deleted tag: "+ id);
-    const todo = await this.tagRepository.findOne({ where: { id: id } });
+    const todo: Tag = await this.tagRepository.findOne({ where: { id: id } });
     if (todo) {
       todo.updatedBy = updatedBy;
       await this.tagRepository.save(todo);
     } else {
       throw new NoTagFoundException(id);
     }
-
     await this.tagRepository.softDelete(id);
-
-    // console.log("Deleted tag: "+ id);
     return response.status(HttpStatus.NO_CONTENT);
   }
 
-  async update(id: string, updateTagDto: UpdateTagDto) {
-    this.resourceValidation(
-      updateTagDto.resourceId,
-      updateTagDto.resourceType,
-      updateTagDto.resource,
-    );
-    this.isStaticValidation(updateTagDto.isStatic, updateTagDto.conditions);
+  async update(
+    id: string,
+    updateTagDto: UpdateTagDto,
+  ): Promise<ResponseTagDto> {
+    const updateIsStatic: boolean =
+      updateTagDto.conditions == null || updateTagDto.conditions.length == 0;
+    const updateConditions: TagConditions[] =
+      updateIsStatic == true ? [] : updateTagDto.conditions;
 
-    const todo = await this.tagRepository.findOne({ where: { id: id } });
-
-    if (!todo) {
+    const todoTag: Tag = await this.tagRepository.findOne({
+      where: { id: id },
+    });
+    if (!todoTag) {
       throw new NoTagFoundException(id);
     }
+    this.matchCoreFields(todoTag, updateTagDto);
 
-    const { isStatic, conditions } = todo;
-    const { isStatic: updateIsStatic, conditions: updateConditions } =
-      updateTagDto;
+    const { isStatic: todoIsStatic, conditions: todoConditions } = todoTag;
 
-    if (isStatic && !updateIsStatic) {
-      todo.isStatic = false;
-      todo.conditions = updateConditions;
-    } else if (!isStatic && updateIsStatic) {
-      todo.isStatic = true;
-    } else if (!isStatic && !updateIsStatic) {
-      todo.conditions = await this.mergeConditions(
-        conditions,
+    if (todoIsStatic && !updateIsStatic) {
+      todoTag.conditions = updateConditions;
+    } else if (!todoIsStatic && updateIsStatic) {
+      todoTag.conditions = [];
+    } else if (!todoIsStatic && !updateIsStatic) {
+      todoTag.conditions = await this.mergeConditions(
+        todoConditions,
         updateConditions,
       );
     }
 
-    todo.updatedBy = updateTagDto.updatedBy;
-    return this.tagRepository.save(todo);
+    todoTag.isStatic = updateIsStatic;
+    todoTag.updatedBy = updateTagDto.updatedBy;
+    return new ResponseTagDto(await this.tagRepository.save(todoTag));
   }
-
-  async resourceValidation(
-    resourceId: string,
-    resourceType: string,
-    resource: string,
-  ) {
+  matchCoreFields(firstTagDto: Tag, secondTagDto: UpdateTagDto) {
     if (
-      (resourceId == null && resourceType == null && resource == null) ||
-      (resourceId != null && resourceType != null && resource != null)
+      createCoreFieldsString(firstTagDto) !=
+      createCoreFieldsString(secondTagDto)
     ) {
-      return;
+      console.log(createSlug(firstTagDto));
+      console.log(createSlug(secondTagDto));
+      throw new UnmatchingTagDetailsValidationException(
+        'resourceId, resourceType, resource, name or type of tag are unmatching with existing tag',
+      );
     }
-
-    throw new ResourceValidationException(
-      'resourceId, resourceType, resource are inconsistent',
-    );
   }
 
-  async isStaticValidation(isStatic: boolean, conditions: TagConditions[]) {
+  isStaticValidation(isStatic: boolean, conditions: TagConditions[]) {
     if (conditions == null && isStatic == false) {
       throw new TagConditionsValidationException(
         'isStatic and conditions are inconsistent',
       );
+    }
+  }
+
+  uploadTags(grid: any[][], createdBy: string): void {
+    const numberOfCols = grid[0].length;
+    const numberOfRows = grid.length;
+
+    for (let col = 1; col < numberOfCols; col++) {
+      const tagType = grid[1][col];
+      const tagKeywords = new Map<string, string[]>();
+
+      for (let row = 2; row < numberOfRows; row++) {
+        const name = grid[row][col];
+        const keyword = grid[row][1];
+        if (!tagKeywords.has(name)) {
+          tagKeywords.set(name, []);
+        }
+        tagKeywords.get(name)?.push(keyword);
+      }
+
+      for (const [name, keywords] of tagKeywords.entries()) {
+        const createTagDto: CreateTagDto = {
+          name,
+          type: tagType,
+          conditions: [
+            {
+              field: 'description',
+              condition: 'contains',
+              keywords: keywords,
+            },
+          ],
+          createdBy: createdBy,
+          resource: null,
+          resourceId: null,
+          resourceType: null,
+        };
+        this.create(createTagDto);
+        console.log('success');
+      }
     }
   }
 }
