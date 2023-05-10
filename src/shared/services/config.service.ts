@@ -88,8 +88,8 @@ export class ConfigService {
    * @memberof ConfigService
    */
   get typeOrmConfig(): TypeOrmModuleOptions {
-    let entities = [__dirname + '/../../modules/**/*.entity{.ts,.js}'];
-    let migrations = [__dirname + '/../../migrations/*{.ts,.js}'];
+    let entities = [__dirname + './../../modules/**/*.entity{.ts,.js}'];
+    let migrations = [__dirname + './../../migrations/*{.ts,.js}'];
 
     if ((module as any).hot) {
       const entityContext = (require as any).context(
