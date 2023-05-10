@@ -170,7 +170,7 @@ export class TagService {
       throw new NoTagFoundException(id);
     }
     await this.tagRepository.softDelete(id);
-    return response.status(HttpStatus.NO_CONTENT);
+    return response.status(HttpStatus.OK);
   }
 
   /**

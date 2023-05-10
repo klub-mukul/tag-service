@@ -30,7 +30,7 @@ import { SharedModule } from './shared/shared.module';
   providers: [AppService],
 })
 export class AppModule {
-  constructor(){
+  constructor() {
     console.log('__dirname' + __dirname);
   }
 }

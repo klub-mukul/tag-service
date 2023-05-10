@@ -216,7 +216,7 @@ export class TagController {
     summary: 'Portal: Archive a single user by its ID.',
   })
   @ApiOkResponse({
-    status: 204,
+    status: 200,
     description: 'Successful',
     type: String,
   })
