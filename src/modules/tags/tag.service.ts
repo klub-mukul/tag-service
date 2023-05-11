@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { response } from 'express';
 import { NoTagFoundException } from '../../exceptions/noTagFoundException.exception';
 import { TagConditionsValidationException } from '../../exceptions/tagConditionsValidationException.exception';
-import { UnmatchingTagDetailsValidationException } from '../../exceptions/unmatchingTagDetailsValidationException.exception';
+import { UnmatchingTagDetailsException } from '../../exceptions/unmatchingTagDetailsValidationException.exception';
 import { CreateTagDto } from './dto/createTag.dto';
 import { GetTagDto } from './dto/getTag.dto';
 import { Tag } from './tag.entity';
@@ -222,7 +222,7 @@ export class TagService {
     ) {
       console.log(createSlug(firstTagDto));
       console.log(createSlug(secondTagDto));
-      throw new UnmatchingTagDetailsValidationException(
+      throw new UnmatchingTagDetailsException(
         'resourceId, resourceType, resource, name or type of tag are unmatching with existing tag',
       );
     }

@@ -9,7 +9,6 @@ import { ConfigService } from './shared/services/config.service';
 import { setupSwagger } from './utils/swagger';
 
 dotenv.config();
-// console.log(process.env)
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,16 +16,11 @@ async function bootstrap() {
 
   app.setGlobalPrefix('tags-svc');
   app.use(compression());
-
-  logger.info(`Server running on port ${3000}`);
-
-  logger.info(`{$process.env.NODE_ENV}`);
-  logger.info(dotenv.config);
-
-  app.use(compression());
   app.use(morgan('combined'));
 
-  // logger.info(configService.nodeEnv);
+  logger.info(`${process.env.NODE_ENV}`);
+  logger.info(dotenv.config);
+
   //swagger
   if (['development', 'staging'].includes(configService.nodeEnv)) {
     setupSwagger(app);

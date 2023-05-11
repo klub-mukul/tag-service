@@ -65,12 +65,12 @@ export class TagController {
    * @memberof TagController
    */
   @Post()
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Post: Create a new tag.',
   })
   @ApiCreatedResponse({
-    status: 200,
+    status: 201,
     description: 'Tag has been successfully created. ',
     type: CreateTagDto,
   })

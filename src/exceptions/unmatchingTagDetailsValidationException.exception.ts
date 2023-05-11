@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-export class UnmatchingTagDetailsValidationException extends HttpException {
+export class UnmatchingTagDetailsException extends HttpException {
   constructor(message: string) {
-    super(message, HttpStatus.BAD_REQUEST);
+    super(message, HttpStatus.NOT_FOUND);
   }
 }
