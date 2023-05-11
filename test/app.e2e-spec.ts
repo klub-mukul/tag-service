@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from './../src/app.module';
+import * as request from 'supertest';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -14,15 +15,14 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  // it('/ (GET)', () => {
-  //   return request(app.getHttpServer())
-  //     .get('/')
-  //     .expect(200)
-  //     .expect('Hello World!');
-  // });
+  it('/ (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/')
+      .expect(200)
+      .expect('Hello World!');
+  });
 
   it('/health (GET)', () => {
-    // return request(app.getHttpServer()).get('/health').expect(200);
     return new Promise((resolve) => resolve({ message: 'Hello World' }));
   });
 });

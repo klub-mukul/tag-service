@@ -153,7 +153,7 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Post()<br />@HttpCode(HttpStatus.OK)<br />@ApiOperation({summary: &#x27;Post: Create a new tag.&#x27;})<br />@ApiCreatedResponse({status: 200, description: &#x27;Tag has been successfully created. &#x27;, type: CreateTagDto})<br />@ApiBadRequestResponse({status: 400, description: &#x27;Tag has not been created. Bad request.&#x27;, type: BadRequestException})<br /></code>
+                    <code>@Post()<br />@HttpCode(HttpStatus.CREATED)<br />@ApiOperation({summary: &#x27;Post: Create a new tag.&#x27;})<br />@ApiCreatedResponse({status: 201, description: &#x27;Tag has been successfully created. &#x27;, type: CreateTagDto})<br />@ApiBadRequestResponse({status: 400, description: &#x27;Tag has not been created. Bad request.&#x27;, type: BadRequestException})<br /></code>
                 </td>
             </tr>
 
@@ -231,7 +231,7 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Delete(&#x27;:id&#x27;)<br />@HttpCode(HttpStatus.OK)<br />@ApiParam({name: &#x27;id&#x27;, type: String, required: true})<br />@ApiOperation({summary: &#x27;Portal: Archive a single user by its ID.&#x27;})<br />@ApiOkResponse({status: 204, description: &#x27;Successful&#x27;, type: String})<br />@ApiNoContentResponse({status: 204, description: &#x27;No tag founded.&#x27;, type: NoTagFoundException})<br />@ApiBadRequestResponse({status: 404, description: &#x27;Bad request.&#x27;, type: BadRequestException})<br /></code>
+                    <code>@Delete(&#x27;:id&#x27;)<br />@HttpCode(HttpStatus.OK)<br />@ApiParam({name: &#x27;id&#x27;, type: String, required: true})<br />@ApiOperation({summary: &#x27;Portal: Archive a single user by its ID.&#x27;})<br />@ApiOkResponse({status: 200, description: &#x27;Successful&#x27;, type: String})<br />@ApiNoContentResponse({status: 204, description: &#x27;No tag founded.&#x27;, type: NoTagFoundException})<br />@ApiBadRequestResponse({status: 404, description: &#x27;Bad request.&#x27;, type: BadRequestException})<br /></code>
                 </td>
             </tr>
 
@@ -685,7 +685,7 @@ import { ResponseTagDto } from &#x27;./dto/responseTag.dto&#x27;;
 import { UpdateTagDto } from &#x27;./dto/updateTag.dto&#x27;;
 import resourceValidation from &#x27;./dto/validations/resourceValidation.validation&#x27;;
 import { TagService } from &#x27;./tag.service&#x27;;
-import { NoTagFoundException } from &#x27;src/exceptions/noTagFoundException.exception&#x27;;
+import { NoTagFoundException } from &#x27;./../../exceptions/noTagFoundException.exception&#x27;;
 
 /**
  * TagController
@@ -710,12 +710,12 @@ export class TagController {
    * @memberof TagController
    */
   @Post()
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: &#x27;Post: Create a new tag.&#x27;,
   })
   @ApiCreatedResponse({
-    status: 200,
+    status: 201,
     description: &#x27;Tag has been successfully created. &#x27;,
     type: CreateTagDto,
   })
@@ -861,7 +861,7 @@ export class TagController {
     summary: &#x27;Portal: Archive a single user by its ID.&#x27;,
   })
   @ApiOkResponse({
-    status: 204,
+    status: 200,
     description: &#x27;Successful&#x27;,
     type: String,
   })

@@ -992,7 +992,7 @@ import { InjectRepository } from &#x27;@nestjs/typeorm&#x27;;
 import { response } from &#x27;express&#x27;;
 import { NoTagFoundException } from &#x27;../../exceptions/noTagFoundException.exception&#x27;;
 import { TagConditionsValidationException } from &#x27;../../exceptions/tagConditionsValidationException.exception&#x27;;
-import { UnmatchingTagDetailsValidationException } from &#x27;../../exceptions/unmatchingTagDetailsValidationException.exception&#x27;;
+import { UnmatchingTagDetailsException } from &#x27;../../exceptions/unmatchingTagDetailsValidationException.exception&#x27;;
 import { CreateTagDto } from &#x27;./dto/createTag.dto&#x27;;
 import { GetTagDto } from &#x27;./dto/getTag.dto&#x27;;
 import { Tag } from &#x27;./tag.entity&#x27;;
@@ -1159,7 +1159,7 @@ export class TagService {
       throw new NoTagFoundException(id);
     }
     await this.tagRepository.softDelete(id);
-    return response.status(HttpStatus.NO_CONTENT);
+    return response.status(HttpStatus.OK);
   }
 
   /**
@@ -1211,7 +1211,7 @@ export class TagService {
     ) {
       console.log(createSlug(firstTagDto));
       console.log(createSlug(secondTagDto));
-      throw new UnmatchingTagDetailsValidationException(
+      throw new UnmatchingTagDetailsException(
         &#x27;resourceId, resourceType, resource, name or type of tag are unmatching with existing tag&#x27;,
       );
     }

@@ -7,6 +7,7 @@ import { HealthController } from './modules/health/health.controller';
 import { TagModule } from './modules/tags/tag.module';
 import { ConfigService } from './shared/services/config.service';
 import { SharedModule } from './shared/shared.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -26,11 +27,11 @@ import { SharedModule } from './shared/shared.module';
       dest: './uploads',
     }),
   ],
-  controllers: [HealthController],
+  controllers: [HealthController, AppController],
   providers: [AppService],
 })
 export class AppModule {
   constructor() {
-    console.log('__dirname' + __dirname);
+    // console.log('__dirname' + __dirname);
   }
 }

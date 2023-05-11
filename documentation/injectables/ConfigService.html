@@ -548,8 +548,8 @@ export class ConfigService {
    * @memberof ConfigService
    */
   get typeOrmConfig(): TypeOrmModuleOptions {
-    let entities &#x3D; [__dirname + &#x27;/../../modules/**/*.entity{.ts,.js}&#x27;];
-    let migrations &#x3D; [__dirname + &#x27;/../../migrations/*{.ts,.js}&#x27;];
+    let entities &#x3D; [__dirname + &#x27;./../../modules/**/*.entity{.ts,.js}&#x27;];
+    let migrations &#x3D; [__dirname + &#x27;./../../migrations/*{.ts,.js}&#x27;];
 
     if ((module as any).hot) {
       const entityContext &#x3D; (require as any).context(

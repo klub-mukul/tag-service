@@ -199,7 +199,11 @@ import { SharedModule } from &#x27;./shared/shared.module&#x27;;
   controllers: [HealthController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    console.log(&#x27;__dirname&#x27; + __dirname);
+  }
+}
 </code></pre>
     </div>
 </div>

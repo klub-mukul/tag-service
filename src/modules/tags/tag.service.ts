@@ -249,12 +249,12 @@ export class TagService {
     const numberOfRows = grid.length;
 
     for (let col = 1; col < numberOfCols; col++) {
-      const tagType = grid[1][col];
+      const tagType = grid[0][col];
       const tagKeywords = new Map<string, string[]>();
 
-      for (let row = 2; row < numberOfRows; row++) {
+      for (let row = 1; row < numberOfRows; row++) {
         const name = grid[row][col];
-        const keyword = grid[row][1];
+        const keyword = grid[row][0];
         if (!tagKeywords.has(name)) {
           tagKeywords.set(name, []);
         }

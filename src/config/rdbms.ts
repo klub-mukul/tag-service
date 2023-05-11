@@ -10,7 +10,7 @@ const SCHEMA = 'tag';
 const config: Record<string, PostgresConnectionOptions> = {
   test: {
     // hard-coding test database as klub_test_db to prevent misuse
-    database: 'tags',
+    database: 'klub_test_db',
     entities: ['dist/modules/**/*.entity{.ts,.js}'],
     extra: {
       max: 5,

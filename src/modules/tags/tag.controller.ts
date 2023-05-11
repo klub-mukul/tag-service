@@ -47,8 +47,8 @@ import { NoTagFoundException } from './../../exceptions/noTagFoundException.exce
  * @export
  * @class TagController
  */
-@ApiTags('Tags')
-@Controller('tags')
+@ApiTags('Tag')
+@Controller('tag')
 export class TagController {
   /**
    * constructor

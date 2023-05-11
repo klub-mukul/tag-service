@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
-const endpoint = '/tags-svc/tags';
+const endpoint = '/tag';
 
 export const postTag = async (data: any, app: INestApplication) =>
   request(app.getHttpServer())

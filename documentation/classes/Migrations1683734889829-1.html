@@ -44,7 +44,7 @@
 
 <ol class="breadcrumb">
   <li>Classes</li>
-  <li >Migrations1683551307003</li>
+  <li >Migrations1683734889829</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -62,7 +62,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/migrations/1683551307003-migrations.ts</code>
+            <code>src/migrations/1683734889829-migrations.ts</code>
         </p>
 
 
@@ -150,12 +150,12 @@
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Default value : </i><code>&#x27;Migrations1683551307003&#x27;</code>
+                        <i>Default value : </i><code>&#x27;Migrations1683734889829&#x27;</code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="4" class="link-to-prism">src/migrations/1683551307003-migrations.ts:4</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="4" class="link-to-prism">src/migrations/1683734889829-migrations.ts:4</a></div>
                         </td>
                     </tr>
 
@@ -193,7 +193,7 @@
             <tr>
                 <td class="col-md-4">
                     <div class="io-line">Defined in <a href="" data-line="12"
-                            class="link-to-prism">src/migrations/1683551307003-migrations.ts:12</a></div>
+                            class="link-to-prism">src/migrations/1683734889829-migrations.ts:12</a></div>
                 </td>
             </tr>
 
@@ -265,7 +265,7 @@
             <tr>
                 <td class="col-md-4">
                     <div class="io-line">Defined in <a href="" data-line="6"
-                            class="link-to-prism">src/migrations/1683551307003-migrations.ts:6</a></div>
+                            class="link-to-prism">src/migrations/1683734889829-migrations.ts:6</a></div>
                 </td>
             </tr>
 
@@ -325,17 +325,17 @@
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { MigrationInterface, QueryRunner } from &#x27;typeorm&#x27;;
 
-export class Migrations1683551307003 implements MigrationInterface {
-  name &#x3D; &#x27;Migrations1683551307003&#x27;;
+export class Migrations1683734889829 implements MigrationInterface {
+  name &#x3D; &#x27;Migrations1683734889829&#x27;;
 
   public async up(queryRunner: QueryRunner): Promise&lt;void&gt; {
     await queryRunner.query(
-      &#x60;CREATE TABLE &quot;tag&quot;.&quot;tags&quot; (&quot;id&quot; uuid NOT NULL DEFAULT uuid_generate_v4(), &quot;name&quot; text NOT NULL, &quot;type&quot; text NOT NULL, &quot;resource&quot; character varying, &quot;resource_id&quot; character varying, &quot;resource_type&quot; character varying, &quot;conditions&quot; jsonb DEFAULT &#x27;[]&#x27;, &quot;is_static&quot; boolean NOT NULL DEFAULT true, &quot;slug&quot; text NOT NULL, &quot;created_at&quot; TIMESTAMP NOT NULL DEFAULT now(), &quot;created_by&quot; text NOT NULL, &quot;updated_at&quot; TIMESTAMP NOT NULL DEFAULT now(), &quot;updated_by&quot; text NOT NULL, &quot;deleted_at&quot; TIMESTAMP, CONSTRAINT &quot;PK_e7dc17249a1148a1970748eda99&quot; PRIMARY KEY (&quot;id&quot;))&#x60;,
+      &#x60;CREATE TABLE &quot;tag&quot;.&quot;tag&quot; (&quot;id&quot; uuid NOT NULL DEFAULT uuid_generate_v4(), &quot;name&quot; text NOT NULL, &quot;type&quot; text NOT NULL, &quot;resource&quot; character varying, &quot;resource_id&quot; character varying, &quot;resource_type&quot; character varying, &quot;conditions&quot; jsonb DEFAULT &#x27;[]&#x27;, &quot;is_static&quot; boolean NOT NULL DEFAULT true, &quot;slug&quot; text NOT NULL, &quot;created_at&quot; TIMESTAMP NOT NULL DEFAULT now(), &quot;created_by&quot; text NOT NULL, &quot;updated_at&quot; TIMESTAMP NOT NULL DEFAULT now(), &quot;updated_by&quot; text NOT NULL, &quot;deleted_at&quot; TIMESTAMP, CONSTRAINT &quot;PK_8e4052373c579afc1471f526760&quot; PRIMARY KEY (&quot;id&quot;))&#x60;,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise&lt;void&gt; {
-    await queryRunner.query(&#x60;DROP TABLE &quot;tag&quot;.&quot;tags&quot;&#x60;);
+    await queryRunner.query(&#x60;DROP TABLE &quot;tag&quot;.&quot;tag&quot;&#x60;);
   }
 }
 </code></pre>
@@ -376,7 +376,7 @@ export class Migrations1683551307003 implements MigrationInterface {
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
-            var COMPODOC_CURRENT_PAGE_URL = 'Migrations1683551307003.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'Migrations1683734889829-1.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
