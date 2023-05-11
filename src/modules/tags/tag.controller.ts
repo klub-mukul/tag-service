@@ -41,6 +41,8 @@ import { UpdateTagDto } from './dto/updateTag.dto';
 import resourceValidation from './dto/validations/resourceValidation.validation';
 import { TagService } from './tag.service';
 import { NoTagFoundException } from './../../exceptions/noTagFoundException.exception';
+import { Any } from 'typeorm';
+import { response } from 'express';
 
 /**
  * TagController
@@ -155,11 +157,6 @@ export class TagController {
   public async getAll(
     @Query(new ValidationPipe()) getTagDto: GetTagDto,
   ): Promise<ResponseTagDto[]> {
-    resourceValidation(
-      getTagDto.resourceId,
-      getTagDto.resourceType,
-      getTagDto.resource,
-    );
     return this.tagService.getAllTags(getTagDto);
   }
 
@@ -218,7 +215,7 @@ export class TagController {
   @ApiOkResponse({
     status: 200,
     description: 'Successful',
-    type: String,
+    type: Any,
   })
   @ApiNoContentResponse({
     status: 204,
@@ -230,11 +227,11 @@ export class TagController {
     description: 'Bad request.',
     type: BadRequestException,
   })
-  delete(
+  async delete(
     @Param('id', ParseUUIDPipe) id: string,
     @Body(new ValidationPipe()) updatedByDto: UpdatedByDto,
   ) {
-    return this.tagService.delete(id, updatedByDto.updatedBy);
+    return await this.tagService.delete(id, updatedByDto.updatedBy);
   }
 
   /**
@@ -267,7 +264,7 @@ export class TagController {
       fileFilter: csvFileFilter,
     }),
   )
-  uploadFile(
+  async uploadFile(
     @UploadedFile() file: Express.Multer.File,
     @Body('createdBy', ParseUUIDPipe) createdBy: string,
   ) {

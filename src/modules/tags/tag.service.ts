@@ -14,6 +14,8 @@ import { ResponseTagDto } from './dto/responseTag.dto';
 import { TagConditions } from './dto/tagConditions.dto';
 import { UpdateTagDto } from './dto/updateTag.dto';
 import { TagRepository } from './tag.respository';
+import { UpdateResult } from 'typeorm';
+import { logger } from './../../config/logger';
 
 /**
  * TagService
@@ -169,8 +171,13 @@ export class TagService {
     } else {
       throw new NoTagFoundException(id);
     }
-    await this.tagRepository.softDelete(id);
-    return response.status(HttpStatus.OK);
+    const updateResult: UpdateResult = await this.tagRepository.softDelete(id);
+    if (updateResult.affected && updateResult.affected > 0) {
+      logger.info(`Archived tag with ID ${id} in the database`);
+    } else {
+      logger.error(`Could not find Tag with id: ${id}`);
+    }
+    return { status: 200, message: `Successfully deleted tag with id: ${id}`};
   }
 
   /**

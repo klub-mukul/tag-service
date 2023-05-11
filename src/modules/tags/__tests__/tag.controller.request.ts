@@ -19,10 +19,33 @@ export const putTenant = async (
     .send(data)
     .set('Accept', 'application/json');
 
-export const deleteTenantByTenantCode = async (
-  tenantCode: string,
+export const deleteTagById = async (
+  id: string,
+  updatedByData: any,
   app: INestApplication,
 ) =>
   request(app.getHttpServer())
-    .delete(`${endpoint}/${tenantCode}`)
+    .delete(`${endpoint}/${id}`)
+    .send(updatedByData)
+    .set('Accept', 'application/json');
+
+export const getATagById = async (
+  id: string,
+  updatedByData: any,
+  app: INestApplication,
+) =>
+  request(app.getHttpServer())
+    .get(`${endpoint}/${id}`)
+    .send(updatedByData)
+    .set('Accept', 'application/json');
+
+export const getAllTags = async (
+  query: Record<string, any>,
+  take: number,
+  page: number,
+  app: INestApplication,
+): Promise<request.Test> =>
+  request(app.getHttpServer())
+    .get(`${endpoint}`)
+    .query({ ...query, take, page })
     .set('Accept', 'application/json');

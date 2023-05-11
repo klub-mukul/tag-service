@@ -1,25 +1,25 @@
-import '../config/env.setup';
+import '../config/envSetup';
 
-import type { Connection } from 'typeorm';
-import { createConnection } from 'typeorm';
-
-import { logger } from './../config/logger';
-import rdbms from './../config/rdbms';
+import { logger } from '../config/logger';
+import { appTestDataSource } from './setup.datasource';
 
 beforeAll(async () => {
-  let connection: Connection;
   try {
-    logger.info('rdbms >>>> in setup >>> ', rdbms);
-    connection = await createConnection(rdbms);
-    if (!connection.isConnected) {
-      await connection.connect();
+    if (!appTestDataSource.isInitialized) {
+      await appTestDataSource.initialize();
     }
-  } catch {
+  } catch (error) {
     // no connection created yet, nothing to get
-    connection = await createConnection(rdbms);
+    logger.error('rdbms >>>> in setup >>> error >>> ', error);
+  }
+
+  try {
+    // Add tasks to be performed before each test here
+  } catch (error) {
+    logger.error('rdbms >>>> in setup >>> error >>> ', error);
   }
 });
 
 afterAll(async () => {
-  // await getConnection().close();
+  await appTestDataSource.destroy();
 });
