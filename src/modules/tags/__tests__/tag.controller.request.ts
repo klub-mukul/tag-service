@@ -49,9 +49,3 @@ export const getAllTags = async (
     .get(`${endpoint}`)
     .query({ ...query, take, page })
     .set('Accept', 'application/json');
-
-    // export const postBulkUploadTag = async (file: CSV, app: INestApplication) =>
-    //   request(app.getHttpServer())
-    //     .post(`${endpoint}/bulk-upload`)
-    //     .send(data)
-    //     .set('Accept', 'application/json');
