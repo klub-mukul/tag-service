@@ -177,7 +177,7 @@ export class TagService {
     } else {
       logger.error(`Could not find Tag with id: ${id}`);
     }
-    return { status: 200, message: `Successfully deleted tag with id: ${id}`};
+    return { status: 200, message: `Successfully deleted tag with id: ${id}` };
   }
 
   /**

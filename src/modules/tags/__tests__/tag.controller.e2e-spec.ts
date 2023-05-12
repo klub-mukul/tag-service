@@ -11,6 +11,7 @@ import {
   postTag,
 } from './tag.controller.request';
 import { appTestDataSource } from './../../../__tests__/setup.datasource';
+import * as request from 'supertest';
 
 const endpoint = '/tag';
 
@@ -138,39 +139,9 @@ describe('tags tests', () => {
       expect(result.body.message).toEqual(resMessage);
     });
   };
-  const deleteTagApiTests = () => {
-    const deleteTagApiTests = () => {
-      it(`DELETE ${endpoint}/:id -> Delete tag by tag id`, async () => {
-        const sampleTag = {
-          resource: 'Bank-1',
-          resourceId: 'T002',
-          resourceType: 'GST-1',
-          type: 'category1',
-          name: 'revenue1',
-          createdBy: uuidv4(),
-          conditions: [
-            {
-              field: 'description',
-              condition: 'contains',
-              keywords: ['a', 'b'],
-            },
-          ],
-        };
-        const postTagResult = await postTag(sampleTag, app);
-        expect(postTagResult.status).toEqual(200);
 
-        const id = postTagResult.body.id;
-        const updatedByData = {
-          updatedBy: uuidv4(),
-        };
-        const deleteTagResult = await deleteTagById(id, updatedByData, app);
-        expect(deleteTagResult.body.message).toMatch(
-          `Successfully deleted tag with id: ${id}`,
-        );
-        expect(deleteTagResult.body.status).toEqual(200);
-      });
-    };
-    it(`DELETE ${endpoint}/:id -> Deleting an already deleted tag`, async () => {
+  const deleteTagApiTests = () => {
+    it(`DELETE ${endpoint}/:id -> Delete tag by tag id`, async () => {
       const sampleTag = {
         resource: 'Bank-1',
         resourceId: 'T002',
@@ -193,17 +164,46 @@ describe('tags tests', () => {
       const updatedByData = {
         updatedBy: uuidv4(),
       };
-      await deleteTagById(id, updatedByData, app);
-
-      const finalDeleteTagResult = await deleteTagById(id, updatedByData, app);
-
-      // console.log(finalDeleteTagResult.body);
-      expect(finalDeleteTagResult.body.message).toMatch(
-        `No Tag Found with id: ${id}`,
+      const deleteTagResult = await deleteTagById(id, updatedByData, app);
+      expect(deleteTagResult.body.message).toMatch(
+        `Successfully deleted tag with id: ${id}`,
       );
-      expect(finalDeleteTagResult.statusCode).toEqual(404);
+      expect(deleteTagResult.body.status).toEqual(200);
     });
   };
+  it(`DELETE ${endpoint}/:id -> Deleting an already deleted tag`, async () => {
+    const sampleTag = {
+      resource: 'Bank-1',
+      resourceId: 'T002',
+      resourceType: 'GST-1',
+      type: 'category1',
+      name: 'revenue1',
+      createdBy: uuidv4(),
+      conditions: [
+        {
+          field: 'description',
+          condition: 'contains',
+          keywords: ['a', 'b'],
+        },
+      ],
+    };
+    const postTagResult = await postTag(sampleTag, app);
+    expect(postTagResult.status).toEqual(201);
+
+    const id = postTagResult.body.id;
+    const updatedByData = {
+      updatedBy: uuidv4(),
+    };
+    await deleteTagById(id, updatedByData, app);
+
+    const finalDeleteTagResult = await deleteTagById(id, updatedByData, app);
+
+    // console.log(finalDeleteTagResult.body);
+    expect(finalDeleteTagResult.body.message).toMatch(
+      `No Tag Found with id: ${id}`,
+    );
+    expect(finalDeleteTagResult.statusCode).toEqual(404);
+  });
   const getATagApiTests = () => {
     it(`GET ${endpoint}/:id  -> Get tag with tag code when that tag exists, Expect tag`, async () => {
       const sampleTag = {
@@ -455,12 +455,43 @@ describe('tags tests', () => {
       );
     });
   };
+  const bulkUploadTagApiTests = () => {
+    console.log(__dirname);
+    const filePath = `${__dirname}/uploads/tags-bulk-upload.csv`;
+    const createdByData = {
+      createdBy: uuidv4(),
+    };
+    it(`POST ${endpoint}/:id  -> Create tags with .csv file having tag details and no createdBy, expect 400`, async () => {
+      const response = await request(app.getHttpServer())
+        .post(`${endpoint}/bulk-upload`)
+        .attach('file', filePath);
+
+      expect(response.status).toEqual(400);
+      expect(response.body.message).toEqual(
+        'The value passed as UUID is not a string',
+      );
+    });
+
+    // it(`POST ${endpoint}/:id  -> Create tags with .csv file having tag details and createdBy, expect 200`, async () => {
+    //   const response = await request(app.getHttpServer())
+    //     .post(`${endpoint}/bulk-upload`)
+    //     // .set('createdBy', uuidv4())
+    //     .attach('file', filePath)
+    //     .field('body', createdByData.createdBy);
+
+    //   expect(response.status).toEqual(200);
+    //   expect(response.body.message).toEqual(
+    //     'The value passed as UUID is not a string',
+    //   );
+    // });
+  };
 
   postTagApiTests();
   deleteTagApiTests();
   getATagApiTests();
   getAllTagApiTests();
   patchTagApiTests();
+  bulkUploadTagApiTests();
 
   afterAll(async () => {
     await clearDb(appTestDataSource);
