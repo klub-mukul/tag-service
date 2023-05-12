@@ -9,13 +9,13 @@ export const postTag = async (data: any, app: INestApplication) =>
     .send(data)
     .set('Accept', 'application/json');
 
-export const putTenant = async (
-  tenantCode: string,
+export const patchTag = async (
+  tagId: string,
   data: any,
   app: INestApplication,
 ) =>
   request(app.getHttpServer())
-    .put(`${endpoint}/${tenantCode}`)
+    .patch(`${endpoint}/${tagId}`)
     .send(data)
     .set('Accept', 'application/json');
 

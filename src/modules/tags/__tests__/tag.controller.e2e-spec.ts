@@ -7,6 +7,7 @@ import {
   deleteTagById,
   getATagById,
   getAllTags,
+  patchTag,
   postTag,
 } from './tag.controller.request';
 import { appTestDataSource } from './../../../__tests__/setup.datasource';
@@ -36,7 +37,7 @@ describe('tags tests', () => {
         resourceType: 'GST-1',
         type: 'category1',
         name: 'revenue1',
-        createdBy: '14c3ecaa-57e8-4673-aa5e-508b7d68724a',
+        createdBy: uuidv4(),
         conditions: [
           {
             field: 'description',
@@ -46,7 +47,7 @@ describe('tags tests', () => {
         ],
       };
       const sampleTagRes = {
-        id: '276cb99d-abb4-4ba0-bd3b-1f47e8637da3',
+        id: uuidv4(),
         name: 'revenue1',
         type: 'category1',
         resource: 'Bank-1',
@@ -79,7 +80,7 @@ describe('tags tests', () => {
         resourceType: 'GST-1',
         type: 'category1',
         name: 'revenue1',
-        createdBy: '14c3ecaa-57e8-4673-aa5e-508b7d68724a',
+        createdBy: uuidv4(),
       };
       const result = await postTag(sampleTag, app);
 
@@ -94,7 +95,7 @@ describe('tags tests', () => {
         resourceId: 'T001',
         resourceType: 'GST-1',
         type: 'category1',
-        createdBy: '14c3ecaa-57e8-4673-aa5e-508b7d68724a',
+        createdBy: uuidv4(),
         conditions: [
           {
             field: 'description',
@@ -120,7 +121,7 @@ describe('tags tests', () => {
         resourceId: 'T001',
         resourceType: 'GST-1',
         type: 'category1',
-        createdBy: '14c3ecaa-57e8-4673-aa5e-508b7d68724a',
+        createdBy: uuidv4(),
         conditions: [
           {
             field: 'description',
@@ -131,7 +132,7 @@ describe('tags tests', () => {
       };
       const resMessage = 'resourceId, resourceType, resource are inconsistent';
       const result = await postTag(sampleTag, app);
-      console.log('result', result.body);
+      // console.log('result', result.body);
 
       expect(result.status).toEqual(400);
       expect(result.body.message).toEqual(resMessage);
@@ -146,7 +147,7 @@ describe('tags tests', () => {
           resourceType: 'GST-1',
           type: 'category1',
           name: 'revenue1',
-          createdBy: '14c3ecaa-57e8-4673-aa5e-508b7d68724a',
+          createdBy: uuidv4(),
           conditions: [
             {
               field: 'description',
@@ -160,7 +161,7 @@ describe('tags tests', () => {
 
         const id = postTagResult.body.id;
         const updatedByData = {
-          updatedBy: '24c3ecaa-57e8-4673-aa5e-508b7d68724b',
+          updatedBy: uuidv4(),
         };
         const deleteTagResult = await deleteTagById(id, updatedByData, app);
         expect(deleteTagResult.body.message).toMatch(
@@ -176,7 +177,7 @@ describe('tags tests', () => {
         resourceType: 'GST-1',
         type: 'category1',
         name: 'revenue1',
-        createdBy: '14c3ecaa-57e8-4673-aa5e-508b7d68724a',
+        createdBy: uuidv4(),
         conditions: [
           {
             field: 'description',
@@ -190,13 +191,13 @@ describe('tags tests', () => {
 
       const id = postTagResult.body.id;
       const updatedByData = {
-        updatedBy: '24c3ecaa-57e8-4673-aa5e-508b7d68724b',
+        updatedBy: uuidv4(),
       };
       await deleteTagById(id, updatedByData, app);
 
       const finalDeleteTagResult = await deleteTagById(id, updatedByData, app);
 
-      console.log(finalDeleteTagResult.body);
+      // console.log(finalDeleteTagResult.body);
       expect(finalDeleteTagResult.body.message).toMatch(
         `No Tag Found with id: ${id}`,
       );
@@ -211,7 +212,7 @@ describe('tags tests', () => {
         resourceType: 'GST-1',
         type: 'category1',
         name: 'revenue1',
-        createdBy: '14c3ecaa-57e8-4673-aa5e-508b7d68724a',
+        createdBy: uuidv4(),
         conditions: [
           {
             field: 'description',
@@ -221,7 +222,7 @@ describe('tags tests', () => {
         ],
       };
       const updatedByData = {
-        updatedBy: '24c3ecaa-57e8-4673-aa5e-508b7d68724b',
+        updatedBy: uuidv4(),
       };
       const postResult = await postTag(sampleTag, app);
       const id: string = postResult.body.id;
@@ -232,7 +233,7 @@ describe('tags tests', () => {
     });
 
     it(`GET ${endpoint}/:id  -> Get tag with tag code when id is not valid, expect Bad request`, async () => {
-      const id: string = 'abc';
+      const id = 'abc';
       const updatedByData = {
         updatedBy: uuidv4(),
       };
@@ -246,14 +247,13 @@ describe('tags tests', () => {
     it(`GET ${endpoint}/:id  -> Get tag with tag code when that doesn't exists`, async () => {
       const id: string = uuidv4();
       const updatedByData = {
-        updatedBy: '24c3ecaa-57e8-4673-aa5e-508b7d68724b',
+        updatedBy: uuidv4(),
       };
       const getResult = await getATagById(id, updatedByData, app);
       expect(getResult.status).toEqual(404);
       expect(getResult.body.message).toEqual(`No Tag Found with id: ${id}`);
     });
   };
-
   const getAllTagApiTests = () => {
     it(`GET ${endpoint} => Get all tags with query parameters`, async () => {
       const sampleTag1 = {
@@ -290,14 +290,12 @@ describe('tags tests', () => {
         app,
       );
       expect(getAllresult1.status).toEqual(200);
-      // console.log('getAllresult1.body');
-      // console.log(getAllresult1.body);
-      // expect(getAllresult1.body.length).toEqual(2);
+      expect(getAllresult1.body.length).toBeGreaterThan(1);
 
       const getAllresult2 = await getAllTags(
         {
           where: {
-            resource: 'Bank-1',
+            type: 'category1',
           },
         },
         1,
@@ -305,7 +303,156 @@ describe('tags tests', () => {
         app,
       );
       expect(getAllresult2.status).toEqual(200);
-      // expect(getAllresult2.body.length).toEqual(1);
+      expect(getAllresult2.body.length).toBeGreaterThan(1);
+    });
+  };
+  const patchTagApiTests = () => {
+    it(`Update ${endpoint} -> Add keywords of conditions of a tag with tag id, expect 200`, async () => {
+      const sampleTag = {
+        resource: 'Bank-10',
+        resourceId: 'T002',
+        resourceType: 'GST-1',
+        type: 'category1',
+        name: 'revenue1',
+        createdBy: uuidv4(),
+        conditions: [
+          {
+            field: 'description',
+            condition: 'contains',
+            keywords: ['a', 'b'],
+          },
+        ],
+      };
+      const sampleTag2 = {
+        resource: 'Bank-10',
+        resourceId: 'T002',
+        resourceType: 'GST-1',
+        type: 'category1',
+        name: 'revenue1',
+        updatedBy: uuidv4(),
+        conditions: [
+          {
+            field: 'description',
+            condition: 'contains',
+            keywords: ['c'],
+          },
+        ],
+      };
+      const postTagResult = await postTag(sampleTag, app);
+      expect(postTagResult.status).toEqual(201);
+      const id = postTagResult.body.id;
+
+      const patchTagResult = await patchTag(id, sampleTag2, app);
+      expect(patchTagResult.status).toEqual(200);
+      expect(patchTagResult.body.id).toEqual(id);
+      expect(patchTagResult.body.conditions).toBeDefined();
+      expect(patchTagResult.body.conditions.length).toEqual(1);
+      expect(patchTagResult.body.conditions[0].keywords).toEqual([
+        'a',
+        'b',
+        'c',
+      ]);
+      expect(patchTagResult.body.isStatic).toEqual(false);
+    });
+
+    it(`Update ${endpoint} -> Update conditions of a tag with tag id, expect 200`, async () => {
+      const sampleTag = {
+        resource: 'Bank-101',
+        resourceId: 'T002',
+        resourceType: 'GST-1',
+        type: 'category1',
+        name: 'revenue1',
+        createdBy: uuidv4(),
+        conditions: [
+          {
+            field: 'description',
+            condition: 'contains',
+            keywords: ['a', 'b'],
+          },
+        ],
+      };
+      const sampleTag2 = {
+        resource: 'Bank-101',
+        resourceId: 'T002',
+        resourceType: 'GST-1',
+        type: 'category1',
+        name: 'revenue1',
+        updatedBy: uuidv4(),
+      };
+      const sampleTag3 = {
+        resource: 'Bank-101',
+        resourceId: 'T002',
+        resourceType: 'GST-1',
+        type: 'category1',
+        name: 'revenue1',
+        updatedBy: uuidv4(),
+        conditions: [
+          {
+            field: 'description',
+            condition: 'contains',
+            keywords: ['a', 'b'],
+          },
+        ],
+      };
+      const postTagResult = await postTag(sampleTag, app);
+      expect(postTagResult.status).toEqual(201);
+      const id = postTagResult.body.id;
+
+      const patchTagResult1 = await patchTag(id, sampleTag2, app);
+      expect(patchTagResult1.body.id).toEqual(id);
+      expect(patchTagResult1.status).toEqual(200);
+      expect(patchTagResult1.body.conditions).toBeDefined();
+      expect(patchTagResult1.body.conditions.length).toEqual(0);
+      expect(patchTagResult1.body.isStatic).toEqual(true);
+
+      const patchTagResult2 = await patchTag(id, sampleTag3, app);
+      expect(patchTagResult2.status).toEqual(200);
+      expect(patchTagResult2.body.id).toEqual(id);
+      expect(patchTagResult2.body.conditions.length).toEqual(1);
+      expect(patchTagResult2.body.conditions).toBeDefined();
+      expect(patchTagResult2.body.conditions).toEqual(sampleTag3.conditions);
+      expect(patchTagResult2.body.isStatic).toEqual(false);
+    });
+
+    it(`Update ${endpoint} -> Patch keywords of conditions of a tag with wrong resource fields, expect 400`, async () => {
+      const sampleTag = {
+        resource: 'Bank-10',
+        resourceId: 'T002',
+        resourceType: 'GST-1',
+        type: 'category1',
+        name: 'revenue1',
+        createdBy: uuidv4(),
+        conditions: [
+          {
+            field: 'description',
+            condition: 'contains',
+            keywords: ['a', 'b'],
+          },
+        ],
+      };
+      const sampleTag2 = {
+        resource: 'Bank-10',
+        resourceId: 'T002',
+        type: 'category1',
+        name: 'revenue1',
+        updatedBy: uuidv4(),
+        conditions: [
+          {
+            field: 'description',
+            condition: 'contains',
+            keywords: ['c'],
+          },
+        ],
+      };
+      const postTagResult = await postTag(sampleTag, app);
+      expect(postTagResult.status).toEqual(201);
+      const id = postTagResult.body.id;
+
+      const patchTagResult = await patchTag(id, sampleTag2, app);
+      expect(patchTagResult.status).toEqual(400);
+      expect(patchTagResult.body.message).toMatch(
+        'resourceId, resourceType, resource are inconsistent',
+      );
     });
   };
 
@@ -313,78 +460,7 @@ describe('tags tests', () => {
   deleteTagApiTests();
   getATagApiTests();
   getAllTagApiTests();
-
-  // //   it(`DELETE ${endpoint}/:tenentCode -> Delete record with incorrect tenant code`, async () => {
-  // //     const result = await postTenant(sampleUpdatetenant2, app);
-  // //     expect(result.body.message).toMatch('Tenant created successfully.');
-  // //     expect(result.status).toEqual(200);
-  // //     const tenantCode = 'Klub';
-
-  // //     const result2 = Tenant(tenantCode, app);
-  // //     expect(result2.body.message).toMatch('Tenent Not found');
-  // //     expect(result2.status).toEqual(422);
-  // //     if (result2.body.data) {
-  // //       expect(result2.body.data.deletedAt).not.toBeNull();
-  // //     }
-  // //   });
-
-  // //Create multiple tenants and check if the tenant code is not duplicate. :- TODO
-
-  // //Update the tenant with correct details
-  // it(`PUT ${endpoint}/:tenantCode -> Update tenant by tenant code`, async () => {
-  //   const result = await postTenant(sampleUpdatetenant1, app);
-
-  //   expect(result.body.message).toMatch('Tenant created successfully.');
-  //   expect(result.status).toEqual(200);
-  //   const tenantCode = result.body.data.tenantCode;
-
-  //   const result1 = await putTenant(tenantCode, updatedtenant1, app);
-  //   expect(result1.body.message).toMatch('Tenant updated successfully.');
-  //   expect(result1.status).toEqual(200);
-  //   // expect(result1.body.data.tenantCode).toEqual(tenantCode);
-  // });
-
-  // //Update tenant with incorrect tenant code
-  // it(`PUT ${endpoint}/:tenantCode -> Update tenant by incorrect tenant code`, async () => {
-  //   const result = await postTenant(sampleUpdatetenant1, app);
-
-  //   expect(result.body.message).toMatch('Tenant created successfully.');
-  //   expect(result.status).toEqual(200);
-  //   const tenantCode = 'KLUB1';
-
-  //   const result1 = await putTenant(tenantCode, updatedtenant1, app);
-  //   expect(result1.body.message).toMatch('Tenant Not Found');
-  //   expect(result1.status).toEqual(404); //  Need to check
-  //   // expect(result1.body.data.tenantCode).toEqual(tenantCode);
-  // });
-
-  // //Update tenant Code and tenant Name
-  // it(`PUT ${endpoint}/:tenantCode -> Update tenant by tenant code with name`, async () => {
-  //   const result = await postTenant(sampleUpdatetenant2, app);
-
-  //   expect(result.body.message).toMatch('Tenant created successfully.');
-  //   expect(result.status).toEqual(200);
-  //   const tenantCode = result.body.data.tenantCode;
-
-  //   const result1 = await putTenant(tenantCode, updatedtenant2, app);
-  //   expect(result1.body.message).toMatch('Tenant updated successfully.');
-  //   expect(result1.status).toEqual(200);
-  //   // expect(result1.body.data.tenantCode).toEqual(tenantCode);
-  // });
-
-  // //Update tenant with nullable fields.
-  // it(`PUT ${endpoint}/:tenantCode -> Update tenant by tenant code with name`, async () => {
-  //   const result = await postTenant(sampleUpdatetenant2, app);
-
-  //   expect(result.body.message).toMatch('Tenant created successfully.');
-  //   expect(result.status).toEqual(200);
-  //   const tenantCode = result.body.data.tenantCode;
-
-  //   const result1 = await putTenant(tenantCode, updatedtenant3, app);
-  //   expect(result1.body.message).toMatch('Unprocessable Entity');
-  //   expect(result1.status).toEqual(422);
-  //   // expect(result1.body.data.tenantCode).toEqual(tenantCode);
-  // });
+  patchTagApiTests();
 
   afterAll(async () => {
     await clearDb(appTestDataSource);
