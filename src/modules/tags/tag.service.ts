@@ -6,7 +6,7 @@ import { TagConditionsValidationException } from '../../exceptions/tagConditions
 import { UnmatchingTagDetailsException } from '../../exceptions/unmatchingTagDetailsValidationException.exception';
 import { CreateTagDto } from './dto/createTag.dto';
 import { GetTagDto } from './dto/getTag.dto';
-import { Tag } from './tag.entity';
+import { TagEntity } from './tag.entity';
 
 import createCoreFieldsString from '../../utils/createCoreFieldsString';
 import createSlug from '../../utils/createSlug';
@@ -31,7 +31,7 @@ export class TagService {
    * @memberof UserService
    */
   constructor(
-    @InjectRepository(Tag)
+    @InjectRepository(TagEntity)
     private readonly tagRepository: TagRepository,
   ) {}
 
@@ -115,7 +115,7 @@ export class TagService {
    * @memberof TagService
    */
   public async getById(id: string): Promise<ResponseTagDto> {
-    const res: Tag = await this.tagRepository.findOne({
+    const res: TagEntity = await this.tagRepository.findOne({
       where: { id: id },
     });
     console.log(res);
@@ -134,7 +134,7 @@ export class TagService {
    */
   async getAllTags(getDto: GetTagDto): Promise<ResponseTagDto[]> {
     console.log(getDto.resource);
-    const res: Tag[] = await this.tagRepository.find({
+    const res: TagEntity[] = await this.tagRepository.find({
       where: {
         resource: getDto.resource,
         resourceId: getDto.resourceId,
@@ -164,7 +164,7 @@ export class TagService {
    * @memberof TagService
    */
   async delete(id: string, updatedBy: string) {
-    const todo: Tag = await this.tagRepository.findOne({ where: { id: id } });
+    const todo: TagEntity = await this.tagRepository.findOne({ where: { id: id } });
     if (todo) {
       todo.updatedBy = updatedBy;
       await this.tagRepository.save(todo);
@@ -197,7 +197,7 @@ export class TagService {
     const updateConditions: TagConditions[] =
       updateIsStatic == true ? [] : updateTagDto.conditions;
 
-    const todoTag: Tag = await this.tagRepository.findOne({
+    const todoTag: TagEntity = await this.tagRepository.findOne({
       where: { id: id },
     });
     if (!todoTag) {
@@ -222,7 +222,7 @@ export class TagService {
     todoTag.updatedBy = updateTagDto.updatedBy;
     return new ResponseTagDto(await this.tagRepository.save(todoTag));
   }
-  matchCoreFields(firstTagDto: Tag, secondTagDto: UpdateTagDto) {
+  matchCoreFields(firstTagDto: TagEntity, secondTagDto: UpdateTagDto) {
     if (
       createCoreFieldsString(firstTagDto) !=
       createCoreFieldsString(secondTagDto)

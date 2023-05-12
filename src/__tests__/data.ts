@@ -56,7 +56,7 @@ const createTestData = async (appTestDataSource: DataSource) => {
       logger.info(`after init ds ${appTestDataSource.isInitialized}`);
       // logger.info(`datasourceObjdatasourceObj not initialized ${JSON.stringify(appTestDataSource, CircularStructuer(), 2)}`);
     }
-    await clearDb(appTestDataSource, ['Tag']);
+    await clearDb(appTestDataSource, ['TagEntity']);
     // await loadData(appTestDataSource);
   } catch (error) {
     logger.info(`Error while loading data ... ${error}`);

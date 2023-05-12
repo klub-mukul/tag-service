@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
-import { Tag } from './../tag.entity';
+import { TagEntity } from './../tag.entity';
 import { TagConditions } from './tagConditions.dto';
 
 export class ResponseTagDto {
@@ -154,11 +154,11 @@ export class ResponseTagDto {
   /**
    * constructor
    * Creates an instance of ResponseTagDto.
-   * @param {Tag} tag
-   * @type {Tag}
+   * @param {TagEntity} tag
+   * @type {TagEntity}
    * @memberof ResponseTagDto
    */
-  constructor(tag: Tag) {
+  constructor(tag: TagEntity) {
     this.id = tag.id;
     this.name = tag.name;
     this.type = tag.type;

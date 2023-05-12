@@ -1,22 +1,22 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Tag } from './tag.entity';
+import { TagEntity } from './tag.entity';
 
 /**
  * TagRepository
  * @export
  * @class TagRepository
- * @extends {Repository<Tag>}
+ * @extends {Repository<TagEntity>}
  */
-export class TagRepository extends Repository<Tag> {
+export class TagRepository extends Repository<TagEntity> {
   /**
    * constructor
    * Creates an instance of UserService.
    * @class TagRepository
-   * @param {Repository<Tag>} tagRepository
+   * @param {Repository<TagEntity>} tagRepository
    */
   constructor(
-    @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
+    @InjectRepository(TagEntity) private readonly tagRepository: Repository<TagEntity>,
   ) {
     super(
       tagRepository.target,

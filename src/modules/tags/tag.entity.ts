@@ -10,11 +10,11 @@ import {
 import { TagConditions } from './dto/tagConditions.dto';
 
 @Entity('tag')
-export class Tag {
+export class TagEntity {
   /**
    * id
    * @type {string}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -22,7 +22,7 @@ export class Tag {
   /**
    * name
    * @type {string}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @Column({ type: 'text', nullable: false })
   name: string;
@@ -30,7 +30,7 @@ export class Tag {
   /**
    * type
    * @type {string}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @Column({ type: 'text', nullable: false })
   type: string;
@@ -38,7 +38,7 @@ export class Tag {
   /**
    *resource
    * @type {string}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @Column({ nullable: true })
   resource?: string;
@@ -46,7 +46,7 @@ export class Tag {
   /**
    * resourceId
    * @type {string}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @Column({ nullable: true })
   resourceId?: string;
@@ -54,7 +54,7 @@ export class Tag {
   /**
    * resourceType
    * @type {string}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @Column({ nullable: true })
   resourceType?: string;
@@ -62,7 +62,7 @@ export class Tag {
   /**
    * conditions
    * @type {TagConditions[]}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @IsObject()
   @Column({ type: 'jsonb', nullable: true, default: [] })
@@ -71,7 +71,7 @@ export class Tag {
   /**
    * isStatic
    * @type {Boolean}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @Column({ default: true, nullable: false })
   isStatic: boolean;
@@ -79,7 +79,7 @@ export class Tag {
   /**
    * slug
    * @type {string}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @Column({ type: 'text', nullable: false })
   slug: string;
@@ -87,7 +87,7 @@ export class Tag {
   /**
    * createdTa
    * @type {Date}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt?: Date;
@@ -95,7 +95,7 @@ export class Tag {
   /**
    * createdBy
    * @type {UUID}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @Column({ type: 'text', nullable: false })
   createdBy: string;
@@ -103,7 +103,7 @@ export class Tag {
   /**
    * updatedAt
    * @type {Date}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updatedAt?: Date;
@@ -111,7 +111,7 @@ export class Tag {
   /**
    * updateBy
    * @type {UUID}
-   * @memberof Tag
+   * @memberof TagEntity
    */
   @Column({ type: 'text', nullable: false })
   updatedBy: string;
@@ -119,7 +119,7 @@ export class Tag {
   /**
    * deletedAt
    * @type {Date}
-   * @memberof tag
+   * @memberof TagEntity
    */
   @DeleteDateColumn()
   deletedAt?: Date;
