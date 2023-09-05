@@ -93,6 +93,10 @@ export class TagController {
     return this.tagService.create(createTagDto);
   }
 
+  @Get('123')
+  public name() {
+    this.tagService.func();
+  }
   /**
    *getById
    * @param {string} id

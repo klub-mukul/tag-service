@@ -16,6 +16,7 @@ import { UpdateTagDto } from './dto/updateTag.dto';
 import { TagRepository } from './tag.respository';
 import { UpdateResult } from 'typeorm';
 import { logger } from './../../config/logger';
+import { Timeout } from '@nestjs/schedule';
 
 /**
  * TagService
@@ -67,6 +68,15 @@ export class TagService {
    * @return {Promise<ResponseTagDto>}
    * @memberof TagService
    */
+  @Timeout(1000)
+  public func() {
+    const type = 'Sub category';
+    const name = 'NaMENAME';
+    const res = this.tagRepository.update({ type }, { name });
+    console.log('updated...........');
+    return res;
+  }
+
   public async create(createTagDto: CreateTagDto): Promise<ResponseTagDto> {
     const slug: string = createSlug({ ...createTagDto });
     const createdBy = createTagDto.createdBy;
@@ -164,7 +174,9 @@ export class TagService {
    * @memberof TagService
    */
   async delete(id: string, updatedBy: string) {
-    const todo: TagEntity = await this.tagRepository.findOne({ where: { id: id } });
+    const todo: TagEntity = await this.tagRepository.findOne({
+      where: { id: id },
+    });
     if (todo) {
       todo.updatedBy = updatedBy;
       await this.tagRepository.save(todo);
